@@ -109,10 +109,10 @@ def get_gdoc():
     config_file_path = os.path.normpath(os.path.join(base, 'config.ini'))
     conf = configparser.ConfigParser()
     conf.read(config_file_path)
+    json_api_key_file_path = os.path.normpath(os.path.join(base, conf.get("googledoc", "json_api_key_file_name")))
+
     scope = ['https://spreadsheets.google.com/feeds']
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(conf.get("googledoc",
-                                                                            "json_api_key_file_name"),
-                                                                   scope)
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(json_api_key_file_path, scope)
     gs = gspread.authorize(credentials)
     doc = gs.open_by_key(conf.get("googledoc", "doc_id"))
     return doc
